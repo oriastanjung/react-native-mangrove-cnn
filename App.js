@@ -1,20 +1,40 @@
+import 'react-native-gesture-handler';
+import React from 'react';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import HomeScreen from './screens/HomeScreen';
+import SplashScreen from './screens/SplashScreen';
+import KlasifikasiFileScreen from './screens/KlasifikasiFileScreen';
+import JenisMangroveScreen from './screens/JenisMangroveScreen';
+import KlasifikasiScreen from './screens/KlasifikasiScreen';
+import KlasifikasiPhotoScreen from "./screens/KlasifikasiPhotoScreen"
+const Stack = createStackNavigator();
+
+const lightTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#ffffff',
+    text: '#000000',
+  },
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer theme={lightTheme}>
+        <StatusBar style="dark" />
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="splash">
+          <Stack.Screen name="splash" component={SplashScreen} />
+          <Stack.Screen name="home" component={HomeScreen} />
+          <Stack.Screen name="klasifikasiScreen" component={KlasifikasiScreen} />
+          <Stack.Screen name="jenisMangroveScreen" component={JenisMangroveScreen} />
+          <Stack.Screen name="klasifikasiFileScreen" component={KlasifikasiFileScreen} />
+          <Stack.Screen name="photoKlasifikasiScreen" component={KlasifikasiPhotoScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
