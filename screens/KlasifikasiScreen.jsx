@@ -7,18 +7,22 @@ import {
   StyleSheet,
   Platform,
   ImageBackground,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 import axios from "axios";
 import splashbg from "../assets/splashbg.png";
 import colors from "../colors";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
+import { klasifikasiGambar } from "../api/services/mangrove";
 const KlasifikasiScreen = () => {
   const navigation = useNavigation();
   const [photo, setPhoto] = useState(null);
   const [result, setResult] = useState("");
-
+  const [data, setData] = useState({});
   const handleChoosePhoto = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -28,8 +32,6 @@ const KlasifikasiScreen = () => {
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
       quality: 1,
     });
 
@@ -40,69 +42,130 @@ const KlasifikasiScreen = () => {
   };
 
   const handleUploadPhoto = async (selectedPhoto) => {
-    const data = new FormData();
-    data.append("photo", {
-      name: selectedPhoto.uri.split("/").pop(),
-      type: "image/jpeg",
-      uri:
-        Platform.OS === "ios"
-          ? selectedPhoto.uri.replace("file://", "")
-          : selectedPhoto.uri,
-    });
-
     try {
-      // const response = await axios.post('YOUR_API_URL', data, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
-      // console.log('Upload success', response.data);
-      console.log("yey berhasil");
-      setResult("Mangrove Jenis Agreviana alba");
+      const base64 = await FileSystem.readAsStringAsync(selectedPhoto.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const response = await klasifikasiGambar(base64);
+      setData(response.data_tanaman);
+      setResult(response.message);
     } catch (error) {
       console.log("Upload error", error);
     }
   };
 
   return (
-    <ImageBackground
-      resizeMode="cover"
-      source={splashbg}
-      style={styles.container}
-    >
-      <TouchableOpacity
-        style={{flex : 1, flexDirection : "row", position : "absolute", top : 50, left : 10, justifyContent : "center", alignItems :"center"}}
-        onPress={() => navigation.navigate("home")}
-      >
-        <Ionicons name="chevron-back" size={32} color="black" />
-        <Text style={{color : "black", fontSize : 20}}>Kembali Ke Menu Utama</Text>
-      </TouchableOpacity>
-      {photo && <Image source={{ uri: photo.uri }} style={styles.image} />}
-      <TouchableOpacity
-        style={[styles.btn, styles.chooseBtn]}
-        onPress={handleChoosePhoto}
-      >
-        <Text style={styles.btnText}>Pilih Gambar</Text>
-      </TouchableOpacity>
+    <>
+      {!photo && (
+        <ImageBackground
+          resizeMode="cover"
+          source={splashbg}
+          style={styles.container}
+        >
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              position: "absolute",
+              top: 50,
+              left: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => navigation.navigate("home")}
+          >
+            <Ionicons name="chevron-back" size={32} color="black" />
+            <Text style={{ color: "black", fontSize: 20 }}>
+              Kembali Ke Menu Utama
+            </Text>
+          </TouchableOpacity>
 
-      {result && (
-        <Text style={styles.textPrediksi}>Klasifikasi : {result}</Text>
+          <TouchableOpacity
+            style={[styles.btn, styles.chooseBtn]}
+            onPress={handleChoosePhoto}
+          >
+            <Text style={styles.btnText}>Pilih Gambar</Text>
+          </TouchableOpacity>
+        </ImageBackground>
       )}
-    </ImageBackground>
+      {photo && (
+        <SafeAreaView style={styles.containerKlasifikasi}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.navigate("home")}
+          >
+            <Ionicons name="chevron-back" size={32} color="black" />
+            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+          </TouchableOpacity>
+          <Image source={{ uri: photo.uri }} style={styles.image} />
+          <ScrollView>
+            {data && (
+              <>
+                {/* <Text style={styles.textPrediksi}>Klasifikasi : {result}</Text> */}
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Hasil Klasifikasi :</Text>
+                  <Text style={styles.infoDesc}>{data.nama}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Deskripsi :</Text>
+                  <Text style={styles.infoDesc}>{data.dekripsi}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Ekologi :</Text>
+                  <Text style={styles.infoDesc}>{data.ekologi}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Manfaat :</Text>
+                  <Text style={styles.infoDesc}>{data.manfaat}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Penyebaran :</Text>
+                  <Text style={styles.infoDesc}>{data.penyebaran}</Text>
+                </View>
+              </>
+            )}
+          </ScrollView>
+        </SafeAreaView>
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  backButton: {
+    flexDirection: "row",
+    position: "absolute",
+    top: 50,
+    left: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  backButtonText: {
+    color: "black",
+    fontSize: 20,
+  },
+  groupInfo: {
+    paddingHorizontal: 30,
+    marginTop: 15,
+    marginBottom: 20,
+  },
+  infoTitle: {
+    fontSize: 24,
+    fontWeight: "600",
+  },
+  infoDesc: {
+    fontSize: 16,
+  },
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
-  image: {
-    width: 300,
-    height: 300,
-    marginBottom: 20,
+  containerKlasifikasi: {
+    flex: 1,
   },
+  image: { marginTop: 100, width: "100%", height: 400, marginBottom: 20 },
   btn: {
     width: "70%",
     padding: 15,

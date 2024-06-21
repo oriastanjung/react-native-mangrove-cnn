@@ -10,6 +10,7 @@ import KlasifikasiFileScreen from './screens/KlasifikasiFileScreen';
 import JenisMangroveScreen from './screens/JenisMangroveScreen';
 import KlasifikasiScreen from './screens/KlasifikasiScreen';
 import KlasifikasiPhotoScreen from "./screens/KlasifikasiPhotoScreen"
+import DetailJenisMangrove from './screens/DetailJenisMangrove';
 const Stack = createStackNavigator();
 
 const lightTheme = {
@@ -31,6 +32,7 @@ export default function App() {
           <Stack.Screen name="home" component={HomeScreen} />
           <Stack.Screen name="klasifikasiScreen" component={KlasifikasiScreen} />
           <Stack.Screen name="jenisMangroveScreen" component={JenisMangroveScreen} />
+          <Stack.Screen name="DetailMangroveDataScreen" component={DetailJenisMangrove} />
           <Stack.Screen name="klasifikasiFileScreen" component={KlasifikasiFileScreen} />
           <Stack.Screen name="photoKlasifikasiScreen" component={KlasifikasiPhotoScreen} />
         </Stack.Navigator>
