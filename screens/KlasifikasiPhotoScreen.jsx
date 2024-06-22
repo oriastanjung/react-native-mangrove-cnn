@@ -1,146 +1,149 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   Image,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   ImageBackground,
-  Alert,
+  SafeAreaView,
+  ScrollView,
+  ActivityIndicator,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker"; // Ubah import ini
-import axios from "axios";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 import splashbg from "../assets/splashbg.png";
 import colors from "../colors";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import * as MediaLibrary from "expo-media-library";
-import { CameraView } from "expo-camera";
+import { klasifikasiGambar } from "../api/services/mangrove";
+
 const KlasifikasiPhotoScreen = () => {
   const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState(false);
   const [file, setFile] = useState(null);
   const [result, setResult] = useState("");
-  const [capturedImage, setCapturedImage] = useState(null);
-  const cameraRef = useRef(null);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state added
+  const [selectedImage, setSelectedImage] = useState(null);
+
   useEffect(() => {
     (async () => {
-      MediaLibrary.requestPermissionsAsync();
-      const cameraPermission = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(cameraPermission);
-      console.log("permisssion >> ]", cameraPermission);
+      await ImagePicker.requestCameraPermissionsAsync();
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
     })();
   }, []);
 
   const handleTakePhoto = async () => {
-    if (cameraRef.current) {
-      try {
-        const options = { quality: 1 }; // Adjust quality for performance/size trade-off
-        const data = await cameraRef.current.takePictureAsync(options);
-        setCapturedImage(data);
-        // Handle upload if camera is ready (prevents accidental upload)
-        await handleUploadFile(data);
-      } catch (error) {
-        console.error("Error taking photo:", error);
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setSelectedImage(result.assets[0]);
+        handleUploadFile(result.assets[0]);
       }
+    } catch (error) {
+      console.error("Error taking photo:", error);
     }
   };
 
-  const handleUploadFile = async (selectedFile) => {
-    const data = new FormData();
-    data.append("file", {
-      name: "photo.jpg", // Nama file yang diunggah (bisa disesuaikan)
-      type: "image/jpeg", // Tipe file gambar
-      uri: selectedFile.uri,
-    });
-
+  const handleUploadFile = async (image) => {
     try {
-      // const response = await axios.post('YOUR_API_URL', data, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
-      // console.log('Upload success', response.data);
-      console.log("yey berhasil");
+      setLoading(true); // Set loading to true when starting upload
+      const base64 = await FileSystem.readAsStringAsync(image.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const response = await klasifikasiGambar(base64);
+      setData(response.data_tanaman);
       setResult("Mangrove Jenis Avicennia alba");
     } catch (error) {
       console.log("Upload error", error);
+    } finally {
+      setLoading(false); // Set loading to false when upload is complete
     }
   };
 
   return (
-    <ImageBackground
-      resizeMode="cover"
-      source={splashbg}
-      style={styles.container}
-    >
-      {!capturedImage && (
-        <View
-          style={{
-            paddingVertical: 100,
-            flex: 1,
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+    <>
+      {!selectedImage && (
+        <ImageBackground
+          resizeMode="cover"
+          source={splashbg}
+          style={styles.container}
         >
-          <CameraView ref={cameraRef} style={styles.camera} facing={"back"}>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                position: "relative",
-                bottom: 0,
-              }}
+          <View style={styles.cameraContainer}>
+            <TouchableOpacity
+              style={[
+                styles.btn,
+                styles.chooseBtn,
+                
+              ]}
+              onPress={handleTakePhoto}
             >
-              <TouchableOpacity
-                style={[
-                  styles.btn,
-                  styles.chooseBtn,
-                  { position: "absolute", bottom: 0 },
-                ]}
-                onPress={handleTakePhoto} // Mengubah onPress event
-              >
-                <Text style={styles.btnText}>Ambil Foto</Text>
-              </TouchableOpacity>
+              <Text style={styles.btnText}>Ambil Foto</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.navigate("home")}
+          >
+            <Ionicons name="chevron-back" size={32} color="black" />
+            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+          </TouchableOpacity>
+        </ImageBackground>
+      )}
+      {selectedImage && (
+        <SafeAreaView style={styles.containerKlasifikasi}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.navigate("home")}
+          >
+            <Ionicons name="chevron-back" size={32} color="black" />
+            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+          </TouchableOpacity>
+          <Image source={{ uri: selectedImage.uri }} style={styles.image} />
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={colors.green} />
+              <Text>Sedang Melakukan Klasifikasi</Text>
             </View>
-          </CameraView>
-        </View>
+          ) : (
+            data && (
+              <ScrollView>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Hasil Klasifikasi :</Text>
+                  <Text style={styles.infoDesc}>{data.nama}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Deskripsi :</Text>
+                  <Text style={styles.infoDesc}>{data.dekripsi}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Ekologi :</Text>
+                  <Text style={styles.infoDesc}>{data.ekologi}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Manfaat :</Text>
+                  <Text style={styles.infoDesc}>{data.manfaat}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Penyebaran :</Text>
+                  <Text style={styles.infoDesc}>{data.penyebaran}</Text>
+                </View>
+              </ScrollView>
+            )
+          )}
+        </SafeAreaView>
       )}
-      {capturedImage && console.log(capturedImage)}
-      {capturedImage && (
-        <Image source={{ uri: capturedImage.uri }} style={styles.image} />
-      )}
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigation.navigate("home")}
-      >
-        <Ionicons name="chevron-back" size={32} color="black" />
-        <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
-      </TouchableOpacity>
-      {file && <Image source={{ uri: file.uri }} style={styles.image} />}
-      {file && <Text style={styles.fileName}>Selected File: {file.name}</Text>}
-
-      {result && <Text style={styles.textPrediksi}>Klasifikasi: {result}</Text>}
-    </ImageBackground>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  camera: {
-    flex: 1,
-    width: "90%",
-    height: 500,
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    color: "black",
-  },
   backButton: {
     flexDirection: "row",
     position: "absolute",
@@ -152,6 +155,39 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: "black",
     fontSize: 20,
+  },
+  groupInfo: {
+    paddingHorizontal: 30,
+    marginTop: 15,
+    marginBottom: 20,
+  },
+  infoTitle: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: "black",
+  },
+  infoDesc: {
+    fontSize: 16,
+    color: "black",
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    color: "black",
+  },
+  containerKlasifikasi: {
+    flex: 1,
+    backgroundColor: "white",
+    color: "black",
+  },
+  image: { marginTop: 100, width: "100%", height: 400, marginBottom: 20 },
+  cameraContainer: {
+    paddingVertical: 100,
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   fileName: {
     fontSize: 16,
@@ -176,15 +212,18 @@ const styles = StyleSheet.create({
   uploadBtn: {
     backgroundColor: "#5C6BC0",
   },
+  loadingContainer: {
+    flex: 1,
+    flexDirection: "row",
+    gap: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 5,
+  },
   textPrediksi: {
     fontSize: 18,
     color: "black",
     fontWeight: "600",
-  },
-  image: {
-    width: 300,
-    height: 300,
-    marginBottom: 20,
   },
 });
 

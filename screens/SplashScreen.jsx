@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import splashbg from "../assets/splashbg.png";
 import colors from "../colors";
+import Button from "../components/Button";
 const SplashScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
@@ -22,9 +23,7 @@ const SplashScreen = ({ navigation }) => {
           style={styles.topSplash}
         />
         <Image source={require("../assets/umrah.png")} style={styles.umrah} />
-        <View
-          style={styles.mainContainer}
-        >
+        <View style={styles.mainContainer}>
           <Image
             source={require("../assets/brand.png")}
             style={styles.brandMangrove}
@@ -33,12 +32,9 @@ const SplashScreen = ({ navigation }) => {
             source={require("../assets/logo.png")}
             style={styles.logoMangrove}
           />
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => navigation.navigate("home")}
-          >
-            <Text style={styles.btnText}>Tap Here to Continue</Text>
-          </TouchableOpacity>
+          <Button isLarge={true} onClick={() => navigation.navigate("home")}>
+            Tap Here to Continue
+          </Button>
         </View>
         <Image
           source={require("../assets/bottomSplash.png")}
@@ -50,7 +46,7 @@ const SplashScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer : {
+  mainContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -85,8 +81,8 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   logoMangrove: {
-    marginTop : 50,
-    marginBottom : 30,
+    marginTop: 50,
+    marginBottom: 30,
     width: 200,
     height: 200,
   },
@@ -109,14 +105,14 @@ const styles = StyleSheet.create({
     marginTop: 50,
     backgroundColor: colors.primary,
     padding: 20,
-    borderRadius:20 ,
+    borderRadius: 20,
     alignItems: "center", // Center text inside the button
   },
   btnText: {
     color: "white",
     fontSize: 16,
     textAlign: "center",
-    fontWeight : "800"
+    fontWeight: "800",
   },
 });
 

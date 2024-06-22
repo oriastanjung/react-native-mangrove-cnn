@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import colors from "../colors";
 import { getAllMangrove } from "../api/services/mangrove";
 import { BACKEND_URL } from "../config";
+import Button from "../components/Button";
 
 const truncateText = (text, maxLength) => {
   if (text.length > maxLength) {
@@ -38,9 +39,9 @@ const ListComponent = ({ title, description, imgSRC, itemId }) => {
       <View style={styles.itemInfo}>
         <Text style={styles.itemTitle}>{title}</Text>
         <Text style={styles.itemDesc}>{truncatedDescription}</Text>
-        <TouchableOpacity style={styles.btnDetail} onPress={handleItemClick}>
-          <Text style={styles.btnText}>Detail</Text>
-        </TouchableOpacity>
+        <Button isLarge={false} onClick={handleItemClick}>
+          Lihat Rincian
+        </Button>
       </View>
     </View>
   );
