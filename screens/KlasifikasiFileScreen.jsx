@@ -188,6 +188,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "OpenSans_400Regular",
     fontWeight: "400",
+    textAlign : "justify"
+
   },
   container: {
     flex: 1,
