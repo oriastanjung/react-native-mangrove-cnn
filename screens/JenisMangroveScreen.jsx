@@ -63,7 +63,7 @@ const JenisMangroveScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.navigate("home")}
@@ -86,8 +86,9 @@ const JenisMangroveScreen = () => {
         )}
         keyExtractor={(item, idx) => idx.toString()}
         contentContainerStyle={styles.listContentContainer}
+        // style={{marginTop : 10}}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
     left: 10,
     justifyContent: "center",
     alignItems: "center",
+    zIndex : 2,
   },
   backButtonText: {
     color: "black",
@@ -137,11 +139,14 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 18,
-    fontWeight: "700",
+    // fontWeight: "700",
+    fontFamily : "OpenSans_700Bold",
+    fontWeight : "700"
   },
   itemDesc: {
     fontSize: 14,
     fontWeight: "400",
+    fontFamily : "OpenSans_400Regular"
   },
   container: {
     flex: 1,

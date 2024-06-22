@@ -18,10 +18,10 @@ const SplashScreen = ({ navigation }) => {
         resizeMode="cover"
         style={styles.imageBg}
       >
-        <Image
+        {/* <Image
           source={require("../assets/topSplash.png")}
           style={styles.topSplash}
-        />
+        /> */}
         <Image source={require("../assets/umrah.png")} style={styles.umrah} />
         <View style={styles.mainContainer}>
           <Image
@@ -36,10 +36,10 @@ const SplashScreen = ({ navigation }) => {
             Tap Here to Continue
           </Button>
         </View>
-        <Image
+        {/* <Image
           source={require("../assets/bottomSplash.png")}
           style={styles.bottomSplash}
-        />
+        /> */}
       </ImageBackground>
     </View>
   );
@@ -81,8 +81,8 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   logoMangrove: {
-    marginTop: 50,
-    marginBottom: 30,
+    marginTop: 0,
+    marginBottom: 150,
     width: 200,
     height: 200,
   },
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 3,
     top: 35,
-    right: 0,
+    right: 10,
     // backgroundColor : 'red',
     width: 60, // Adjust the size as needed
     height: 60, // Adjust the size as needed

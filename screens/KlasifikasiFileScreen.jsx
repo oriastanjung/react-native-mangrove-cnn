@@ -112,7 +112,9 @@ const KlasifikasiFileScreen = () => {
             <Ionicons name="chevron-back" size={32} color="black" />
             <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
           </TouchableOpacity>
-          <Image source={{ uri: file.uri }} style={styles.image} />
+          <View style={{ paddingHorizontal: 16 }}>
+            <Image source={{ uri: file.uri }} style={styles.image} />
+          </View>
           {data && (
             <ScrollView>
               <View style={styles.groupInfo}>
@@ -159,16 +161,33 @@ const styles = StyleSheet.create({
   groupInfo: {
     paddingHorizontal: 30,
     marginTop: 15,
-    marginBottom: 20,
+    marginBottom: 10,
+    borderWidth: 1,
+    marginHorizontal: 20,
+    borderRadius: 16,
+    borderColor: "white",
+    padding: 10,
+    backgroundColor: "white",
+    // Shadow properties
+    shadowColor: "#000", // Shadow color
+    shadowOffset: {
+      // Offset of the shadow
+      width: 0, // Horizontal offset
+      height: 2, // Vertical offset
+    },
+    shadowOpacity: 0.25, // Opacity of the shadow
+    shadowRadius: 3.84, // Blur radius of the shadow
+    elevation: 9,
   },
   infoTitle: {
     fontSize: 24,
     fontWeight: "600",
-    color : "black"
+    fontFamily: "OpenSans_600Semibold",
   },
   infoDesc: {
     fontSize: 16,
-    color : "black"
+    fontFamily: "OpenSans_400Regular",
+    fontWeight: "400",
   },
   container: {
     flex: 1,
@@ -178,10 +197,29 @@ const styles = StyleSheet.create({
   },
   containerKlasifikasi: {
     flex: 1,
-    backgroundColor : "white",
-    color : "black"
+    backgroundColor: "white",
+    color: "black",
   },
-  image: { marginTop: 100, width: "100%", height: 400, marginBottom: 20 },
+  image: {
+    marginTop: 100,
+    width: "100%",
+    height: 400,
+    marginBottom: 20,
+    width: "100%",
+    borderRadius: 30,
+    height: 300,
+    zIndex: 1,
+    // Shadow properties
+    shadowColor: "#000", // Shadow color
+    shadowOffset: {
+      // Offset of the shadow
+      width: 0, // Horizontal offset
+      height: 4, // Vertical offset
+    },
+    shadowOpacity: 0.3, // Opacity of the shadow
+    shadowRadius: 4.65, // Blur radius of the shadow
+    elevation: 8,
+  },
   backButton: {
     flexDirection: "row",
     position: "absolute",
@@ -212,7 +250,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   chooseBtn: {
-    backgroundColor: colors.green,
+    backgroundColor: colors.greenDark,
   },
   uploadBtn: {
     backgroundColor: "#5C6BC0",

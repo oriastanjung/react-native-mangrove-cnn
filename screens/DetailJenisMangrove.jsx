@@ -1,12 +1,9 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
   SafeAreaView,
-  StatusBar,
   Image,
-  FlatList,
   View,
   TouchableOpacity,
   ScrollView,
@@ -23,6 +20,7 @@ function DetailJenisMangrove() {
   const { itemId } = route.params;
   const [data, setData] = useState({});
   const [imageUrl, setImageUrl] = useState("");
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,10 +33,10 @@ function DetailJenisMangrove() {
       }
     };
     fetchData();
-  }, []);
+  }, [itemId]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.navigate("jenisMangroveScreen")}
@@ -49,10 +47,12 @@ function DetailJenisMangrove() {
       {data && (
         <>
           <ScrollView>
-            <Image
-              source={{ uri: imageUrl && imageUrl }}
-              style={styles.mainImageTop}
-            />
+            <View style={{ flex: 1, width: "100%", paddingHorizontal: 16 }}>
+              <Image
+                source={{ uri: imageUrl }}
+                style={styles.mainImageTop}
+              />
+            </View>
             <View style={styles.groupInfo}>
               <Text style={styles.infoTitle}>Nama :</Text>
               <Text style={styles.infoDesc}>{data.nama}</Text>
@@ -76,7 +76,7 @@ function DetailJenisMangrove() {
           </ScrollView>
         </>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -84,19 +84,50 @@ const styles = StyleSheet.create({
   groupInfo: {
     paddingHorizontal: 30,
     marginTop: 15,
-    marginBottom: 20,
+    marginBottom: 10,
+    borderWidth: 1,
+    marginHorizontal: 20,
+    borderRadius: 16,
+    borderColor: "white",
+    padding: 10,
+    backgroundColor: "white",
+    // Shadow properties
+    shadowColor: "#000", // Shadow color
+    shadowOffset: {
+      // Offset of the shadow
+      width: 0, // Horizontal offset
+      height: 2, // Vertical offset
+    },
+    shadowOpacity: 0.25, // Opacity of the shadow
+    shadowRadius: 3.84, // Blur radius of the shadow
+    elevation: 9,
   },
   infoTitle: {
     fontSize: 24,
     fontWeight: "600",
+    fontFamily: "OpenSans_600Semibold",
   },
   infoDesc: {
     fontSize: 16,
+    fontFamily: "OpenSans_400Regular",
+    fontWeight: "400",
+    textAlign: "justify",
   },
   mainImageTop: {
     width: "100%",
+    borderRadius: 30,
     height: 300,
     zIndex: 1,
+    // Shadow properties
+    shadowColor: "#000", // Shadow color
+    shadowOffset: {
+      // Offset of the shadow
+      width: 0, // Horizontal offset
+      height: 4, // Vertical offset
+    },
+    shadowOpacity: 0.3, // Opacity of the shadow
+    shadowRadius: 4.65, // Blur radius of the shadow
+    elevation: 8,
   },
   btnDetail: {
     marginTop: 6,
@@ -118,6 +149,7 @@ const styles = StyleSheet.create({
     left: 10,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 2,
   },
   backButtonText: {
     color: "black",

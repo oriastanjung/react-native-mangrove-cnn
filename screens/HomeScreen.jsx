@@ -11,19 +11,21 @@ import { useNavigation } from "@react-navigation/native";
 import splashbg from "../assets/splashbg.png";
 import colors from "../colors";
 import { Ionicons } from "@expo/vector-icons";
-import { Feather } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 const HomeScreen = () => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <Image
+      {/* <Image
         source={require("../assets/mangrove.png")}
         style={styles.mainImageTop}
-      />
-      <Text style={styles.text}>MANGROVE-ID</Text>
+      /> */}
+      <View style={styles.headText}>
+        <Text style={styles.text}>MANGROVE-ID</Text>
+      </View>
       <ImageBackground
         resizeMode="cover"
         source={splashbg}
@@ -48,7 +50,12 @@ const HomeScreen = () => {
             onPress={() => navigation.navigate("klasifikasiFileScreen")}
           >
             <View style={styles.btnBackground} />
-            <Feather name="file-text" size={84} color="white"  style={styles.icon}/>
+            <Feather
+              name="file-text"
+              size={84}
+              color="white"
+              style={styles.icon}
+            />
             <Text style={styles.btnText}>Unggah File</Text>
           </TouchableOpacity>
         </View>
@@ -58,7 +65,12 @@ const HomeScreen = () => {
             onPress={() => navigation.navigate("photoKlasifikasiScreen")}
           >
             <View style={styles.btnBackground} />
-            <AntDesign name="camerao" size={84} color="white" style={styles.icon} />
+            <AntDesign
+              name="camerao"
+              size={84}
+              color="white"
+              style={styles.icon}
+            />
             <Text style={styles.btnText}>Ambil Gambar</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -66,10 +78,19 @@ const HomeScreen = () => {
             onPress={() => navigation.navigate("jenisMangroveScreen")}
           >
             <View style={styles.btnBackground} />
-            <MaterialCommunityIcons name="file-document-edit-outline" size={84} color="white" style={styles.icon}/>
+            <MaterialCommunityIcons
+              name="file-document-edit-outline"
+              size={84}
+              color="white"
+              style={styles.icon}
+            />
             <Text style={styles.btnText}>Daftar Jenis</Text>
           </TouchableOpacity>
         </View>
+        <Image
+          source={require("../assets/bottomSplash.png")}
+          style={styles.bottomSplash}
+        />
       </ImageBackground>
     </View>
   );
@@ -88,32 +109,45 @@ const styles = StyleSheet.create({
     height: 200,
     zIndex: 1,
   },
-  text: {
-    backgroundColor: colors.green,
+  headText: {
+    backgroundColor: colors.greenDark,
     position: "absolute",
-    top: 160,
+    top: 200,
     zIndex: 3,
-    fontSize: 24,
     marginBottom: 20,
-    fontWeight: "900",
-    color: "white",
-    borderRadius: 20,
+    // fontWeight: "400",
+    borderRadius: 16,
     paddingHorizontal: 30,
-    paddingVertical: 20,
+    // paddingVertical: 10,
+    paddingTop: 4,
+    paddingBottom: 0,
+  },
+  text: {
+    fontSize: 32,
+    fontFamily: "Poppins_900Black",
+    color: "white",
   },
   gridContainer: {
     flex: 1,
-    paddingTop : 100,
-    marginTop: 150,
+    paddingTop: 160,
+    // marginTop: 150,
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
   row: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
     width: "100%",
-    marginBottom: 50,
+    marginBottom: 5,
+  },
+  bottomSplash: {
+    flex: 1,
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    height: 100,
+    zIndex: 2,
   },
   btn: {
     position: "relative",
@@ -121,14 +155,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     margin: 10, // Adds spacing between buttons
-    width: 180, // Fixed width
-    height: 180, // Fixed height
+    width: 160, // Fixed width
+    height: 160, // Fixed height
     justifyContent: "center", // Center the content vertically
   },
   btnBackground: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.green,
-    opacity: 0.75, // Set the desired opacity here
+    backgroundColor: colors.greenDark,
+    // opacity: 0.75, // Set the desired opacity here
     borderRadius: 10, // Make sure the borderRadius matches the button's borderRadius
   },
   icon: {
@@ -136,11 +170,12 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   btnText: {
+    fontFamily: "OpenSans_700Bold",
     color: "white",
     fontSize: 18,
     textAlign: "center",
     zIndex: 1,
-    fontWeight : "700"
+    fontWeight: "700",
   },
 });
 
