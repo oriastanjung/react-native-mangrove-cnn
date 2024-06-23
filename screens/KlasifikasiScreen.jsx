@@ -10,9 +10,11 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import * as ImageManipulator from "expo-image-manipulator"; // Import ImageManipulator
 import axios from "axios";
 import splashbg from "../assets/splashbg.png";
 import colors from "../colors";
@@ -40,9 +42,29 @@ const KlasifikasiScreen = () => {
     });
 
     if (!result.canceled) {
-      setPhoto(result.assets[0]);
-      handleUploadPhoto(result.assets[0]); // Memanggil handleUploadPhoto dengan foto yang dipilih
+      const { uri, fileSize } = await FileSystem.getInfoAsync(result.assets[0].uri);
+      if (fileSize > 1.5 * 1024 * 1024) {
+        Alert.alert("File Size Error", "The selected file size exceeds 1.5 MB. Please select a smaller file.");
+        return;
+      }
+
+      const compressedPhoto = await compressImage(result.assets[0]); // Compress the image
+      setPhoto(compressedPhoto);
+      handleUploadPhoto(compressedPhoto); // Upload the compressed image
     }
+  };
+
+  const compressImage = async (photo) => {
+    const manipResult = await ImageManipulator.manipulateAsync(
+      photo.uri,
+      [{resize : {width : 600, height : 500}}], // Resize the image
+      { compress: 0.75, format: ImageManipulator.SaveFormat.JPEG } // Adjust compression as needed
+    );
+    return {
+      uri: manipResult.uri,
+      name: photo.name,
+      type: "image/jpeg",
+    };
   };
 
   const handleUploadPhoto = async (selectedPhoto) => {
@@ -53,8 +75,7 @@ const KlasifikasiScreen = () => {
       });
 
       const response = await klasifikasiGambar(base64);
-      // console.log("response >>",response)
-      setData({...response.data_tanaman, confidence : response.confidence});
+      setData({ ...response.data_tanaman, confidence: response.confidence });
       setResult(response.message);
       setLoading(false);
     } catch (error) {
@@ -118,7 +139,7 @@ const KlasifikasiScreen = () => {
               {data && (
                 <>
                   <View style={styles.groupInfo}>
-                   <Text style={styles.infoTitle}>Classification Result :</Text>
+                    <Text style={styles.infoTitle}>Classification Result :</Text>
                     <Text style={styles.infoDesc}>{data.nama}</Text>
                     <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
                   </View>

@@ -9,9 +9,11 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import * as ImageManipulator from "expo-image-manipulator"; // Import ImageManipulator
 import splashbg from "../assets/splashbg.png";
 import colors from "../colors";
 import { useNavigation } from "@react-navigation/native";
@@ -38,18 +40,36 @@ const KlasifikasiPhotoScreen = () => {
     try {
       const result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
-        quality: 0.3,
+        quality: 1,
       });
-      if (!result.cancelled) {
-        setSelectedImage(result.assets[0]);
-        handleUploadFile(result.assets[0]);
+      if (!result.canceled) {
+        const compressedImage = await compressImage(result.assets[0]);
+        const fileInfo = await FileSystem.getInfoAsync(compressedImage.uri);
+        if (fileInfo.size > 1.5 * 1024 * 1024) {
+          Alert.alert("File too large", "Please select an image less than 1.5MB.");
+          return;
+        }
+        setSelectedImage(compressedImage);
+        handleUploadFile(compressedImage);
       }
     } catch (error) {
       console.error("Error taking photo:", error);
     }
   };
 
- 
+  const compressImage = async (image) => {
+    const manipResult = await ImageManipulator.manipulateAsync(
+      image.uri,
+      [{ resize: { width: 600, height: 500 } }], // Resize the image
+      { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG } // Adjust compression as needed
+    );
+    return {
+      uri: manipResult.uri,
+      name: image.name,
+      type: "image/jpeg",
+    };
+  };
+
   const handleUploadFile = async (image) => {
     try {
       setLoading(true);
@@ -58,12 +78,9 @@ const KlasifikasiPhotoScreen = () => {
       });
 
       const response = await klasifikasiGambar(base64);
-      // console.log("API Response:", response);
-      // setData(response.data_tanaman);
-      setData({...response.data_tanaman, confidence : response.confidence});
+      setData({ ...response.data_tanaman, confidence: response.confidence });
       setResult("Success");
       setLoading(false);
-
     } catch (error) {
       console.error("Upload error", error);
     } finally {
@@ -117,10 +134,9 @@ const KlasifikasiPhotoScreen = () => {
             data && (
               <ScrollView>
                 <View style={styles.groupInfo}>
-                 <Text style={styles.infoTitle}>Classification Result :</Text>
+                  <Text style={styles.infoTitle}>Classification Result :</Text>
                   <Text style={styles.infoDesc}>{data.nama}</Text>
                   <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
-
                 </View>
                 <View style={styles.groupInfo}>
                   <Text style={styles.infoTitle}>Description :</Text>

@@ -39,7 +39,7 @@ const ListComponent = ({ title, description, imgSRC, itemId }) => {
         <Text style={styles.itemTitle}>{title}</Text>
         <Text style={styles.itemDesc}>{truncatedDescription}</Text>
         <Button isLarge={false} onClick={handleItemClick}>
-          Lihat Rincian
+         See More
         </Button>
       </View>
     </View>

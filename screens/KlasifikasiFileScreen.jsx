@@ -54,8 +54,8 @@ const KlasifikasiFileScreen = () => {
 
       if (!allowedTypes.includes(mimeType)) {
         Alert.alert(
-          "File Tidak Disupport",
-          "Harap pilih file dengan extensi jpg, jpeg, atau png."
+          "File Not Supported",
+          "Please use file with extension jpg, jpeg, or png."
         );
         return;
       }
