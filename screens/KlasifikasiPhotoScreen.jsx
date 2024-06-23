@@ -24,12 +24,11 @@ const KlasifikasiPhotoScreen = () => {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState("");
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false); // Loading state added
+  const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     (async () => {
-      await ImagePicker.requestCameraPermissionsAsync();
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
     })();
@@ -39,7 +38,7 @@ const KlasifikasiPhotoScreen = () => {
     try {
       const result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
-        quality: 1,
+        quality: 0.3,
       });
       if (!result.cancelled) {
         setSelectedImage(result.assets[0]);
@@ -50,20 +49,35 @@ const KlasifikasiPhotoScreen = () => {
     }
   };
 
+  const isValidBase64 = (str) => {
+    if (typeof str !== 'string') {
+      return false;
+    }
+    const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+    return base64Regex.test(str);
+  };
+
   const handleUploadFile = async (image) => {
     try {
-      setLoading(true); // Set loading to true when starting upload
+      setLoading(true);
       const base64 = await FileSystem.readAsStringAsync(image.uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
 
+      if (!isValidBase64(base64)) {
+        throw new Error('Invalid Base64 string');
+      }
+
+      // console.log("Base64 Image:", base64);
+
       const response = await klasifikasiGambar(base64);
+      // console.log("API Response:", response);
       setData(response.data_tanaman);
-      setResult("Mangrove Jenis Avicennia alba");
+      setResult("Success");
     } catch (error) {
-      console.log("Upload error", error);
+      console.error("Upload error", error);
     } finally {
-      setLoading(false); // Set loading to false when upload is complete
+      setLoading(false);
     }
   };
 
@@ -101,7 +115,7 @@ const KlasifikasiPhotoScreen = () => {
             <Ionicons name="chevron-back" size={32} color="black" />
             <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
           </TouchableOpacity>
-          <View style={{paddingHorizontal : 16}}>
+          <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: selectedImage.uri }} style={styles.image} />
           </View>
           {loading ? (
@@ -165,14 +179,13 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "white",
     // Shadow properties
-    shadowColor: "#000", // Shadow color
+    shadowColor: "#000",
     shadowOffset: {
-      // Offset of the shadow
-      width: 0, // Horizontal offset
-      height: 2, // Vertical offset
+      width: 0,
+      height: 2,
     },
-    shadowOpacity: 0.25, // Opacity of the shadow
-    shadowRadius: 3.84, // Blur radius of the shadow
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
     elevation: 9,
   },
   infoTitle: {
@@ -184,8 +197,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "OpenSans_400Regular",
     fontWeight: "400",
-    textAlign : "justify"
-
+    textAlign: "justify",
   },
   container: {
     flex: 1,
@@ -203,19 +215,15 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 400,
     marginBottom: 20,
-    width: "100%",
     borderRadius: 30,
-    height: 300,
     zIndex: 1,
-    // Shadow properties
-    shadowColor: "#000", // Shadow color
+    shadowColor: "#000",
     shadowOffset: {
-      // Offset of the shadow
-      width: 0, // Horizontal offset
-      height: 4, // Vertical offset
+      width: 0,
+      height: 4,
     },
-    shadowOpacity: 0.3, // Opacity of the shadow
-    shadowRadius: 4.65, // Blur radius of the shadow
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
     elevation: 8,
   },
   cameraContainer: {

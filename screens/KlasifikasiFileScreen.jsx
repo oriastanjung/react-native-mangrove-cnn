@@ -10,6 +10,7 @@ import {
   Alert,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
@@ -24,6 +25,7 @@ const KlasifikasiFileScreen = () => {
   const [file, setFile] = useState(null);
   const [data, setData] = useState(null);
   const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChooseFile = async () => {
     try {
@@ -37,7 +39,7 @@ const KlasifikasiFileScreen = () => {
         return;
       }
 
-      console.log("Document Picker Result:", result);
+      // console.log("Document Picker Result:", result);
 
       const { mimeType, uri } = result.assets[0];
 
@@ -66,6 +68,7 @@ const KlasifikasiFileScreen = () => {
   };
 
   const handleUploadFile = async (selectedFile) => {
+    setLoading(true);
     try {
       const base64 = await FileSystem.readAsStringAsync(selectedFile.uri, {
         encoding: FileSystem.EncodingType.Base64,
@@ -76,6 +79,8 @@ const KlasifikasiFileScreen = () => {
       setResult("Mangrove Jenis Avicennia alba");
     } catch (error) {
       console.log("Upload error", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -115,29 +120,36 @@ const KlasifikasiFileScreen = () => {
           <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: file.uri }} style={styles.image} />
           </View>
-          {data && (
-            <ScrollView>
-              <View style={styles.groupInfo}>
-                <Text style={styles.infoTitle}>Hasil Klasifikasi :</Text>
-                <Text style={styles.infoDesc}>{data.nama}</Text>
-              </View>
-              <View style={styles.groupInfo}>
-                <Text style={styles.infoTitle}>Deskripsi :</Text>
-                <Text style={styles.infoDesc}>{data.dekripsi}</Text>
-              </View>
-              <View style={styles.groupInfo}>
-                <Text style={styles.infoTitle}>Ekologi :</Text>
-                <Text style={styles.infoDesc}>{data.ekologi}</Text>
-              </View>
-              <View style={styles.groupInfo}>
-                <Text style={styles.infoTitle}>Manfaat :</Text>
-                <Text style={styles.infoDesc}>{data.manfaat}</Text>
-              </View>
-              <View style={styles.groupInfo}>
-                <Text style={styles.infoTitle}>Penyebaran :</Text>
-                <Text style={styles.infoDesc}>{data.penyebaran}</Text>
-              </View>
-            </ScrollView>
+          {loading ? (
+            <View style={{flex : 1, alignItems : "center",flexDirection: "row", gap : 5, justifyContent : "center"}}>
+              <ActivityIndicator size="large" color={colors.greenDark} />
+              <Text>Sedang Melakukan Klasifikasi</Text>
+            </View>
+          ) : (
+            data && (
+              <ScrollView>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Hasil Klasifikasi :</Text>
+                  <Text style={styles.infoDesc}>{data.nama}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Deskripsi :</Text>
+                  <Text style={styles.infoDesc}>{data.dekripsi}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Ekologi :</Text>
+                  <Text style={styles.infoDesc}>{data.ekologi}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Manfaat :</Text>
+                  <Text style={styles.infoDesc}>{data.manfaat}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Penyebaran :</Text>
+                  <Text style={styles.infoDesc}>{data.penyebaran}</Text>
+                </View>
+              </ScrollView>
+            )
           )}
         </SafeAreaView>
       )}
@@ -189,7 +201,6 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans_400Regular",
     fontWeight: "400",
     textAlign : "justify"
-
   },
   container: {
     flex: 1,

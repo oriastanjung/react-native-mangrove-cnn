@@ -9,6 +9,7 @@ import {
   ImageBackground,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
@@ -18,11 +19,14 @@ import colors from "../colors";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { klasifikasiGambar } from "../api/services/mangrove";
+
 const KlasifikasiScreen = () => {
   const navigation = useNavigation();
   const [photo, setPhoto] = useState(null);
   const [result, setResult] = useState("");
   const [data, setData] = useState({});
+  const [loading, setLoading] = useState(false);
+
   const handleChoosePhoto = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -42,6 +46,7 @@ const KlasifikasiScreen = () => {
   };
 
   const handleUploadPhoto = async (selectedPhoto) => {
+    setLoading(true);
     try {
       const base64 = await FileSystem.readAsStringAsync(selectedPhoto.uri, {
         encoding: FileSystem.EncodingType.Base64,
@@ -52,6 +57,8 @@ const KlasifikasiScreen = () => {
       setResult(response.message);
     } catch (error) {
       console.log("Upload error", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,21 +71,11 @@ const KlasifikasiScreen = () => {
           style={styles.container}
         >
           <TouchableOpacity
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              position: "absolute",
-              top: 50,
-              left: 10,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+            style={styles.backButton}
             onPress={() => navigation.navigate("home")}
           >
             <Ionicons name="chevron-back" size={32} color="black" />
-            <Text style={{ color: "black", fontSize: 20 }}>
-              Kembali Ke Menu Utama
-            </Text>
+            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -98,36 +95,50 @@ const KlasifikasiScreen = () => {
             <Ionicons name="chevron-back" size={32} color="black" />
             <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
           </TouchableOpacity>
-          <View style={{paddingHorizontal : 16}}>
+          <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: photo.uri }} style={styles.image} />
           </View>
-          <ScrollView>
-            {data && (
-              <>
-                {/* <Text style={styles.textPrediksi}>Klasifikasi : {result}</Text> */}
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Hasil Klasifikasi :</Text>
-                  <Text style={styles.infoDesc}>{data.nama}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Deskripsi :</Text>
-                  <Text style={styles.infoDesc}>{data.dekripsi}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Ekologi :</Text>
-                  <Text style={styles.infoDesc}>{data.ekologi}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Manfaat :</Text>
-                  <Text style={styles.infoDesc}>{data.manfaat}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Penyebaran :</Text>
-                  <Text style={styles.infoDesc}>{data.penyebaran}</Text>
-                </View>
-              </>
-            )}
-          </ScrollView>
+          {loading ? (
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                flexDirection: "row",
+                gap: 5,
+                justifyContent: "center",
+              }}
+            >
+              <ActivityIndicator size="large" color={colors.greenDark} />
+              <Text>Sedang Melakukan Klasifikasi</Text>
+            </View>
+          ) : (
+            <ScrollView>
+              {data && (
+                <>
+                  <View style={styles.groupInfo}>
+                    <Text style={styles.infoTitle}>Hasil Klasifikasi :</Text>
+                    <Text style={styles.infoDesc}>{data.nama}</Text>
+                  </View>
+                  <View style={styles.groupInfo}>
+                    <Text style={styles.infoTitle}>Deskripsi :</Text>
+                    <Text style={styles.infoDesc}>{data.dekripsi}</Text>
+                  </View>
+                  <View style={styles.groupInfo}>
+                    <Text style={styles.infoTitle}>Ekologi :</Text>
+                    <Text style={styles.infoDesc}>{data.ekologi}</Text>
+                  </View>
+                  <View style={styles.groupInfo}>
+                    <Text style={styles.infoTitle}>Manfaat :</Text>
+                    <Text style={styles.infoDesc}>{data.manfaat}</Text>
+                  </View>
+                  <View style={styles.groupInfo}>
+                    <Text style={styles.infoTitle}>Penyebaran :</Text>
+                    <Text style={styles.infoDesc}>{data.penyebaran}</Text>
+                  </View>
+                </>
+              )}
+            </ScrollView>
+          )}
         </SafeAreaView>
       )}
     </>
@@ -142,7 +153,7 @@ const styles = StyleSheet.create({
     left: 10,
     justifyContent: "center",
     alignItems: "center",
-    zIndex : 2
+    zIndex: 2,
   },
   backButtonText: {
     color: "black",
@@ -178,7 +189,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "OpenSans_400Regular",
     fontWeight: "400",
-    textAlign : "justify"
+    textAlign: "justify",
   },
   container: {
     flex: 1,
@@ -193,7 +204,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 400,
     marginBottom: 20,
-    width: "100%",
     borderRadius: 30,
     height: 300,
     zIndex: 1,

@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
-  SafeAreaView,
-  StatusBar,
+  View,
   Image,
   FlatList,
-  View,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -46,9 +45,11 @@ const ListComponent = ({ title, description, imgSRC, itemId }) => {
     </View>
   );
 };
+
 const JenisMangroveScreen = () => {
   const navigation = useNavigation();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +58,8 @@ const JenisMangroveScreen = () => {
         setData(result); // Set data yang diterima ke state
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false); // Set loading state to false after data is fetched
       }
     };
     fetchData();
@@ -71,23 +74,25 @@ const JenisMangroveScreen = () => {
         <Ionicons name="chevron-back" size={32} color="black" />
         <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
       </TouchableOpacity>
-      {/* {data && console.log(data[0].i)} */}
-      <FlatList
-        data={data}
-        renderItem={({ item }) => (
-          <ListComponent
-            title={item.nama}
-            description={item.dekripsi}
-            imgSRC={
-              item.imgSRC ? item.imgSRC : require("../assets/mangrove.png")
-            }
-            itemId={item.id}
-          />
-        )}
-        keyExtractor={(item, idx) => idx.toString()}
-        contentContainerStyle={styles.listContentContainer}
-        // style={{marginTop : 10}}
-      />
+      {loading ? ( // Show loading indicator while loading is true
+        <ActivityIndicator size="large" color={colors.greenDark} />
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={({ item }) => (
+            <ListComponent
+              title={item.nama}
+              description={item.dekripsi}
+              imgSRC={
+                item.imgSRC ? item.imgSRC : require("../assets/mangrove.png")
+              }
+              itemId={item.id}
+            />
+          )}
+          keyExtractor={(item, idx) => idx.toString()}
+          contentContainerStyle={styles.listContentContainer}
+        />
+      )}
     </View>
   );
 };
@@ -113,7 +118,7 @@ const styles = StyleSheet.create({
     left: 10,
     justifyContent: "center",
     alignItems: "center",
-    zIndex : 2,
+    zIndex: 2,
   },
   backButtonText: {
     color: "black",
@@ -139,14 +144,13 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 18,
-    // fontWeight: "700",
-    fontFamily : "OpenSans_700Bold",
-    fontWeight : "700"
+    fontFamily: "OpenSans_700Bold",
+    fontWeight: "700",
   },
   itemDesc: {
     fontSize: 14,
     fontWeight: "400",
-    fontFamily : "OpenSans_400Regular"
+    fontFamily: "OpenSans_400Regular",
   },
   container: {
     flex: 1,
