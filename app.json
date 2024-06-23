@@ -19,6 +19,13 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "config": {
+        "cleartext": {
+          "config": {
+            "includeDomains": ["http://103.23.198.21:5000","103.23.198.21","http://103.23.198.21"] 
+          }
+        }
+      },
       "package": "com.mangroveid.app"
     },
     "web": {
@@ -26,7 +33,18 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          },
+          "ios": {
+            "flipper": true
+          }
+        }
+      ]
     ],
     "extra": {
       "router": {
