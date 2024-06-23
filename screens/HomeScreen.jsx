@@ -43,7 +43,7 @@ const HomeScreen = () => {
               color="white"
               style={styles.icon}
             />
-            <Text style={styles.btnText}>Unggah Gambar</Text>
+            <Text style={styles.btnText}>Upload Image</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn}
@@ -56,7 +56,7 @@ const HomeScreen = () => {
               color="white"
               style={styles.icon}
             />
-            <Text style={styles.btnText}>Unggah File</Text>
+            <Text style={styles.btnText}>Upload File</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -71,7 +71,7 @@ const HomeScreen = () => {
               color="white"
               style={styles.icon}
             />
-            <Text style={styles.btnText}>Ambil Gambar</Text>
+            <Text style={styles.btnText}>Take Picture</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btn}
@@ -84,7 +84,7 @@ const HomeScreen = () => {
               color="white"
               style={styles.icon}
             />
-            <Text style={styles.btnText}>Daftar Jenis</Text>
+            <Text style={styles.btnText}>Species</Text>
           </TouchableOpacity>
         </View>
         <Image

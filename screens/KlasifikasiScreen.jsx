@@ -55,6 +55,7 @@ const KlasifikasiScreen = () => {
       const response = await klasifikasiGambar(base64);
       setData(response.data_tanaman);
       setResult(response.message);
+      setLoading(false);
     } catch (error) {
       console.log("Upload error", error);
     } finally {
@@ -116,23 +117,23 @@ const KlasifikasiScreen = () => {
               {data && (
                 <>
                   <View style={styles.groupInfo}>
-                    <Text style={styles.infoTitle}>Hasil Klasifikasi :</Text>
+                   <Text style={styles.infoTitle}>Classification Result :</Text>
                     <Text style={styles.infoDesc}>{data.nama}</Text>
                   </View>
                   <View style={styles.groupInfo}>
-                    <Text style={styles.infoTitle}>Deskripsi :</Text>
+                    <Text style={styles.infoTitle}>Description :</Text>
                     <Text style={styles.infoDesc}>{data.dekripsi}</Text>
                   </View>
                   <View style={styles.groupInfo}>
-                    <Text style={styles.infoTitle}>Ekologi :</Text>
+                    <Text style={styles.infoTitle}>Ecology :</Text>
                     <Text style={styles.infoDesc}>{data.ekologi}</Text>
                   </View>
                   <View style={styles.groupInfo}>
-                    <Text style={styles.infoTitle}>Manfaat :</Text>
+                    <Text style={styles.infoTitle}>Benefit :</Text>
                     <Text style={styles.infoDesc}>{data.manfaat}</Text>
                   </View>
                   <View style={styles.groupInfo}>
-                    <Text style={styles.infoTitle}>Penyebaran :</Text>
+                    <Text style={styles.infoTitle}>Spread :</Text>
                     <Text style={styles.infoDesc}>{data.penyebaran}</Text>
                   </View>
                 </>

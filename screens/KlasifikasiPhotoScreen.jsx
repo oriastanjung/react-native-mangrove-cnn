@@ -49,14 +49,7 @@ const KlasifikasiPhotoScreen = () => {
     }
   };
 
-  const isValidBase64 = (str) => {
-    if (typeof str !== 'string') {
-      return false;
-    }
-    const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
-    return base64Regex.test(str);
-  };
-
+ 
   const handleUploadFile = async (image) => {
     try {
       setLoading(true);
@@ -64,16 +57,12 @@ const KlasifikasiPhotoScreen = () => {
         encoding: FileSystem.EncodingType.Base64,
       });
 
-      if (!isValidBase64(base64)) {
-        throw new Error('Invalid Base64 string');
-      }
-
-      // console.log("Base64 Image:", base64);
-
       const response = await klasifikasiGambar(base64);
       // console.log("API Response:", response);
       setData(response.data_tanaman);
       setResult("Success");
+      setLoading(false);
+
     } catch (error) {
       console.error("Upload error", error);
     } finally {
@@ -127,23 +116,23 @@ const KlasifikasiPhotoScreen = () => {
             data && (
               <ScrollView>
                 <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Hasil Klasifikasi :</Text>
+                 <Text style={styles.infoTitle}>Classification Result :</Text>
                   <Text style={styles.infoDesc}>{data.nama}</Text>
                 </View>
                 <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Deskripsi :</Text>
+                  <Text style={styles.infoTitle}>Description :</Text>
                   <Text style={styles.infoDesc}>{data.dekripsi}</Text>
                 </View>
                 <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Ekologi :</Text>
+                  <Text style={styles.infoTitle}>Ecology :</Text>
                   <Text style={styles.infoDesc}>{data.ekologi}</Text>
                 </View>
                 <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Manfaat :</Text>
+                  <Text style={styles.infoTitle}>Benefit :</Text>
                   <Text style={styles.infoDesc}>{data.manfaat}</Text>
                 </View>
                 <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Penyebaran :</Text>
+                  <Text style={styles.infoTitle}>Spread :</Text>
                   <Text style={styles.infoDesc}>{data.penyebaran}</Text>
                 </View>
               </ScrollView>

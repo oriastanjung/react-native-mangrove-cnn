@@ -54,23 +54,23 @@ function DetailJenisMangrove() {
               />
             </View>
             <View style={styles.groupInfo}>
-              <Text style={styles.infoTitle}>Nama :</Text>
+              <Text style={styles.infoTitle}>Name :</Text>
               <Text style={styles.infoDesc}>{data.nama}</Text>
             </View>
             <View style={styles.groupInfo}>
-              <Text style={styles.infoTitle}>Deskripsi :</Text>
+              <Text style={styles.infoTitle}>Description :</Text>
               <Text style={styles.infoDesc}>{data.dekripsi}</Text>
             </View>
             <View style={styles.groupInfo}>
-              <Text style={styles.infoTitle}>Ekologi :</Text>
+              <Text style={styles.infoTitle}>Ecology :</Text>
               <Text style={styles.infoDesc}>{data.ekologi}</Text>
             </View>
             <View style={styles.groupInfo}>
-              <Text style={styles.infoTitle}>Manfaat :</Text>
+              <Text style={styles.infoTitle}>Benefit :</Text>
               <Text style={styles.infoDesc}>{data.manfaat}</Text>
             </View>
             <View style={styles.groupInfo}>
-              <Text style={styles.infoTitle}>Penyebaran :</Text>
+              <Text style={styles.infoTitle}>Spread :</Text>
               <Text style={styles.infoDesc}>{data.penyebaran}</Text>
             </View>
           </ScrollView>

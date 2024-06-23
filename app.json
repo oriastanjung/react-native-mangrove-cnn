@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Mangrove-ID",
-    "slug": "mangrove-id",
+    "slug": "mangrove-id-kqvvyebhr1gek3as31i",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -33,7 +33,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "7f6b8a5d-fd04-4653-ae78-205acd0c3129"
+        "projectId": "4054afe5-caf3-4c97-b644-83f93debae83"
       }
     },
     "owner": "oriastanjung"
