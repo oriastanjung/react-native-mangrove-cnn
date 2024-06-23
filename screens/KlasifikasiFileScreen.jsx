@@ -75,7 +75,9 @@ const KlasifikasiFileScreen = () => {
       });
 
       const response = await klasifikasiGambar(base64);
-      setData(response.data_tanaman);
+      // setData(response.data_tanaman);
+      setData({...response.data_tanaman, confidence : response.confidence});
+
       setResult("Sukses");
       setLoading(false);
     } catch (error) {
@@ -98,14 +100,14 @@ const KlasifikasiFileScreen = () => {
             onPress={() => navigation.navigate("home")}
           >
             <Ionicons name="chevron-back" size={32} color="black" />
-            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+            <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.btn, styles.chooseBtn]}
             onPress={handleChooseFile}
           >
-            <Text style={styles.btnText}>Pilih File</Text>
+            <Text style={styles.btnText}>Upload File</Text>
           </TouchableOpacity>
         </ImageBackground>
       )}
@@ -116,7 +118,7 @@ const KlasifikasiFileScreen = () => {
             onPress={() => navigation.navigate("home")}
           >
             <Ionicons name="chevron-back" size={32} color="black" />
-            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+            <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
           <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: file.uri }} style={styles.image} />
@@ -132,6 +134,7 @@ const KlasifikasiFileScreen = () => {
                 <View style={styles.groupInfo}>
                   <Text style={styles.infoTitle}>Classification Result :</Text>
                   <Text style={styles.infoDesc}>{data.nama}</Text>
+                  <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
                 </View>
                 <View style={styles.groupInfo}>
                   <Text style={styles.infoTitle}>Description :</Text>

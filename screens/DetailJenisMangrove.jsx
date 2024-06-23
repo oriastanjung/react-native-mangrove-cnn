@@ -42,7 +42,7 @@ function DetailJenisMangrove() {
         onPress={() => navigation.navigate("jenisMangroveScreen")}
       >
         <Ionicons name="chevron-back" size={32} color="black" />
-        <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+        <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
       {data && (
         <>

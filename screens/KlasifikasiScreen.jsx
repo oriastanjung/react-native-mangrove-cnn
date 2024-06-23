@@ -53,7 +53,8 @@ const KlasifikasiScreen = () => {
       });
 
       const response = await klasifikasiGambar(base64);
-      setData(response.data_tanaman);
+      // console.log("response >>",response)
+      setData({...response.data_tanaman, confidence : response.confidence});
       setResult(response.message);
       setLoading(false);
     } catch (error) {
@@ -76,14 +77,14 @@ const KlasifikasiScreen = () => {
             onPress={() => navigation.navigate("home")}
           >
             <Ionicons name="chevron-back" size={32} color="black" />
-            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+            <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.btn, styles.chooseBtn]}
             onPress={handleChoosePhoto}
           >
-            <Text style={styles.btnText}>Pilih Gambar</Text>
+            <Text style={styles.btnText}>Open Gallery</Text>
           </TouchableOpacity>
         </ImageBackground>
       )}
@@ -94,7 +95,7 @@ const KlasifikasiScreen = () => {
             onPress={() => navigation.navigate("home")}
           >
             <Ionicons name="chevron-back" size={32} color="black" />
-            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+            <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
           <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: photo.uri }} style={styles.image} />
@@ -119,6 +120,7 @@ const KlasifikasiScreen = () => {
                   <View style={styles.groupInfo}>
                    <Text style={styles.infoTitle}>Classification Result :</Text>
                     <Text style={styles.infoDesc}>{data.nama}</Text>
+                    <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
                   </View>
                   <View style={styles.groupInfo}>
                     <Text style={styles.infoTitle}>Description :</Text>

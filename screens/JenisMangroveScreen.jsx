@@ -72,7 +72,7 @@ const JenisMangroveScreen = () => {
         onPress={() => navigation.navigate("home")}
       >
         <Ionicons name="chevron-back" size={32} color="black" />
-        <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+        <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
       {loading ? ( // Show loading indicator while loading is true
         <ActivityIndicator size="large" color={colors.greenDark} />

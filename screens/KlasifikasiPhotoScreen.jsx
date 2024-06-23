@@ -59,7 +59,8 @@ const KlasifikasiPhotoScreen = () => {
 
       const response = await klasifikasiGambar(base64);
       // console.log("API Response:", response);
-      setData(response.data_tanaman);
+      // setData(response.data_tanaman);
+      setData({...response.data_tanaman, confidence : response.confidence});
       setResult("Success");
       setLoading(false);
 
@@ -83,7 +84,7 @@ const KlasifikasiPhotoScreen = () => {
               style={[styles.btn, styles.chooseBtn]}
               onPress={handleTakePhoto}
             >
-              <Text style={styles.btnText}>Ambil Foto</Text>
+              <Text style={styles.btnText}>Open Camera</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
@@ -91,7 +92,7 @@ const KlasifikasiPhotoScreen = () => {
             onPress={() => navigation.navigate("home")}
           >
             <Ionicons name="chevron-back" size={32} color="black" />
-            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+            <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
         </ImageBackground>
       )}
@@ -102,7 +103,7 @@ const KlasifikasiPhotoScreen = () => {
             onPress={() => navigation.navigate("home")}
           >
             <Ionicons name="chevron-back" size={32} color="black" />
-            <Text style={styles.backButtonText}>Kembali Ke Menu Utama</Text>
+            <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
           <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: selectedImage.uri }} style={styles.image} />
@@ -118,6 +119,8 @@ const KlasifikasiPhotoScreen = () => {
                 <View style={styles.groupInfo}>
                  <Text style={styles.infoTitle}>Classification Result :</Text>
                   <Text style={styles.infoDesc}>{data.nama}</Text>
+                  <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
+
                 </View>
                 <View style={styles.groupInfo}>
                   <Text style={styles.infoTitle}>Description :</Text>
