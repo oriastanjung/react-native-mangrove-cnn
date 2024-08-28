@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
@@ -19,6 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import splashbg from "../assets/splashbg.png";
 import colors from "../colors";
 import { klasifikasiGambar } from "../api/services/mangrove";
+import { Video } from "expo-av";
 
 const KlasifikasiFileScreen = () => {
   const navigation = useNavigation();
@@ -26,7 +28,9 @@ const KlasifikasiFileScreen = () => {
   const [data, setData] = useState(null);
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(true); // State for video loading
 
+  const { width, height } = Dimensions.get("window"); // Get screen dimensions
   const handleChooseFile = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -76,8 +80,8 @@ const KlasifikasiFileScreen = () => {
 
       const response = await klasifikasiGambar(base64);
       // setData(response.data_tanaman);
-      setData({...response.data_tanaman, confidence : response.confidence});
-
+      setData({ ...response.data_tanaman, confidence: response.confidence });
+      console.log("response >> ", response);
       setResult("Sukses");
       setLoading(false);
     } catch (error) {
@@ -99,7 +103,7 @@ const KlasifikasiFileScreen = () => {
             style={styles.backButton}
             onPress={() => navigation.navigate("home")}
           >
-            <Ionicons name="chevron-back" size={32} color="black" />
+            <Ionicons name="chevron-back" size={32} color="white" />
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
 
@@ -117,40 +121,77 @@ const KlasifikasiFileScreen = () => {
             style={styles.backButton}
             onPress={() => navigation.navigate("home")}
           >
-            <Ionicons name="chevron-back" size={32} color="black" />
+            <Ionicons name="chevron-back" size={32} color="white" />
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
-          <View style={{ paddingHorizontal: 16 }}>
+          {/* <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: file.uri }} style={styles.image} />
-          </View>
+          </View> */}
           {loading ? (
-            <View style={{flex : 1, alignItems : "center",flexDirection: "row", gap : 5, justifyContent : "center"}}>
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                flexDirection: "row",
+                gap: 5,
+                justifyContent: "center",
+              }}
+            >
               <ActivityIndicator size="large" color={colors.greenDark} />
-              <Text>Sedang Melakukan Klasifikasi</Text>
+              <Text style={{ color : "white" }}>Sedang Melakukan Klasifikasi</Text>
             </View>
           ) : (
+            // data && (
+            //   <ScrollView>
+            //     <View style={styles.groupInfo}>
+            //       <Text style={styles.infoTitle}>Classification Result :</Text>
+            //       <Text style={styles.infoDesc}>{data.nama}</Text>
+            //       <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
+            //     </View>
+            //     <View style={styles.groupInfo}>
+            //       <Text style={styles.infoTitle}>Description :</Text>
+            //       <Text style={styles.infoDesc}>{data.dekripsi}</Text>
+            //     </View>
+            //     <View style={styles.groupInfo}>
+            //       <Text style={styles.infoTitle}>Ecology :</Text>
+            //       <Text style={styles.infoDesc}>{data.ekologi}</Text>
+            //     </View>
+            //     <View style={styles.groupInfo}>
+            //       <Text style={styles.infoTitle}>Benefit :</Text>
+            //       <Text style={styles.infoDesc}>{data.manfaat}</Text>
+            //     </View>
+            //     <View style={styles.groupInfo}>
+            //       <Text style={styles.infoTitle}>Spread :</Text>
+            //       <Text style={styles.infoDesc}>{data.penyebaran}</Text>
+            //     </View>
+            //   </ScrollView>
+            // )
             data && (
               <ScrollView>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Classification Result :</Text>
-                  <Text style={styles.infoDesc}>{data.nama}</Text>
-                  <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Description :</Text>
-                  <Text style={styles.infoDesc}>{data.dekripsi}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Ecology :</Text>
-                  <Text style={styles.infoDesc}>{data.ekologi}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Benefit :</Text>
-                  <Text style={styles.infoDesc}>{data.manfaat}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Spread :</Text>
-                  <Text style={styles.infoDesc}>{data.penyebaran}</Text>
+                <View style={styles.containerVideo}>
+                  {videoLoading && (
+                    <View style={styles.videoLoadingContainer}>
+                      <ActivityIndicator
+                        size="large"
+                        color={"white"}
+                      />
+                      <Text style={{ color : "white" }}>Sedang Load Video</Text>
+                    </View>
+                  )}
+                  <Video
+                    source={{
+                      uri: data.videoSRC,
+                    }}
+                    rate={1.0}
+                    volume={1.0}
+                    isMuted={false}
+                    resizeMode="contain"
+                    shouldPlay
+                    onLoadStart={() => setVideoLoading(true)} // Start loading
+                    onLoad={() => setVideoLoading(false)} // Stop loading when the video is loaded\
+                    onEnd
+                    style={{ width: width, height: height }} // Set video to full screen
+                  />
                 </View>
               </ScrollView>
             )
@@ -162,6 +203,12 @@ const KlasifikasiFileScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  containerVideo: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    // marginTop: 20,
+  },
   backButton: {
     flexDirection: "row",
     position: "absolute",
@@ -169,9 +216,21 @@ const styles = StyleSheet.create({
     left: 10,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 100,
+  },
+  videoLoadingContainer: {
+    position: "absolute",
+    top: "50%",
+    left: "40%",
+    transform: [{ translateX: -50 }, { translateY: -50 }],
+    flexDirection: "row",
+    gap: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
   },
   backButtonText: {
-    color: "black",
+    color: "white",
     fontSize: 20,
   },
   groupInfo: {
@@ -204,7 +263,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "OpenSans_400Regular",
     fontWeight: "400",
-    textAlign : "justify"
+    textAlign: "justify",
   },
   container: {
     flex: 1,
@@ -214,8 +273,7 @@ const styles = StyleSheet.create({
   },
   containerKlasifikasi: {
     flex: 1,
-    backgroundColor: "white",
-    color: "black",
+    backgroundColor:"black"
   },
   image: {
     marginTop: 100,
@@ -237,16 +295,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65, // Blur radius of the shadow
     elevation: 8,
   },
-  backButton: {
-    flexDirection: "row",
-    position: "absolute",
-    top: 50,
-    left: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+
   backButtonText: {
-    color: "black",
+    color: "white",
     fontSize: 20,
   },
   fileName: {

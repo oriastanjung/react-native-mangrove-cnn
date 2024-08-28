@@ -14,7 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-const HomeScreen = () => {
+const AboutScreen = () => {
   const navigation = useNavigation();
 
   return (
@@ -23,100 +23,57 @@ const HomeScreen = () => {
         source={require("../assets/mangrove.png")}
         style={styles.mainImageTop}
       /> */}
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.navigate("home")}
+      >
+        <Ionicons name="chevron-back" size={32} color="white" />
+        <Text style={styles.backButtonText}>Back</Text>
+      </TouchableOpacity>
       <View style={styles.headText}>
         <Text style={styles.text}>MANGROVE-ID</Text>
+      </View>
+      <View style={{ position : "absolute", zIndex : 100, bottom : "15%", display : "flex", flexDirection : "column", gap: 5, width : "80%",borderRadius : 24, paddingHorizontal : 16, backgroundColor : "white" , paddingVertical : 24  }}>
+        <Text style={{ color : "black", fontSize : 18, fontWeight : "700" ,textAlign : "center" }}>Created by Mangrove ID</Text>
+        <Text style={{ color : "black", fontSize : 18, fontWeight : "700" ,textAlign : "center" }}>2024 ©  All Rights Reserved</Text>
+        <Text style={{ color : "black" , fontSize : 16, fontWeight : "700", marginTop : 30,textAlign : "left"  }}>People participated : </Text>
+        <Text style={{ color : "black" , fontSize : 16, fontWeight : "500", marginTop : 25 ,textAlign : "left"}}>1. Dr. Donny Apdillah, S.Pi., M.Si</Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>2. Nola Ritha, S.T., M.Cs </Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>3. Trinanda </Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>4. Alramadan Oloansyah Dasopang </Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>5. Teti Herliana </Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>6. O. Riastanjung </Text>
       </View>
       <ImageBackground
         resizeMode="cover"
         source={splashbg}
         style={styles.gridContainer}
-      >
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => navigation.navigate("klasifikasiScreen")}
-          >
-            <View style={styles.btnBackground} />
-            <Ionicons
-              name="image-outline"
-              size={84}
-              color="white"
-              style={styles.icon}
-            />
-            <Text style={styles.btnText}>Upload Image</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => navigation.navigate("klasifikasiFileScreen")}
-          >
-            <View style={styles.btnBackground} />
-            <Feather
-              name="file-text"
-              size={84}
-              color="white"
-              style={styles.icon}
-            />
-            <Text style={styles.btnText}>Upload File</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => navigation.navigate("photoKlasifikasiScreen")}
-          >
-            <View style={styles.btnBackground} />
-            <AntDesign
-              name="camerao"
-              size={84}
-              color="white"
-              style={styles.icon}
-            />
-            <Text style={styles.btnText}>Take Picture</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => navigation.navigate("jenisMangroveScreen")}
-          >
-            <View style={styles.btnBackground} />
-            <MaterialCommunityIcons
-              name="file-document-edit-outline"
-              size={84}
-              color="white"
-              style={styles.icon}
-            />
-            <Text style={styles.btnText}>Species</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          style={styles.infoBTN}
-          onPress={() => navigation.navigate("aboutScreen")}
-        >
-          <MaterialCommunityIcons
-            name="information-outline"
-            size={48}
-            color="white"
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-        <Image
-          source={require("../assets/bottomSplash.png")}
-          style={styles.bottomSplash}
-        />
-      </ImageBackground>
+      ></ImageBackground>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  backButton: {
+    flexDirection: "row",
+    position: "absolute",
+    top: 50,
+    left: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+  },
+  backButtonText: {
+    color: "white",
+    fontSize: 20,
+  },
   infoBTN: {
-    display : "flex",
-    alignItems : "center",
-    justifyContent : "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     position: "absolute",
     top: "5%",
     right: "5%",
-
-
   },
   container: {
     flex: 1,
@@ -200,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default AboutScreen;

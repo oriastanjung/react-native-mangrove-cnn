@@ -10,6 +10,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Dimensions,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
@@ -19,6 +20,7 @@ import colors from "../colors";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { klasifikasiGambar } from "../api/services/mangrove";
+import { Video } from "expo-av";
 
 const KlasifikasiPhotoScreen = () => {
   const navigation = useNavigation();
@@ -28,7 +30,9 @@ const KlasifikasiPhotoScreen = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [videoLoading, setVideoLoading] = useState(true); // State for video loading
 
+  const { width, height } = Dimensions.get("window"); // Get screen dimensions
   useEffect(() => {
     (async () => {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -108,7 +112,7 @@ const KlasifikasiPhotoScreen = () => {
             style={styles.backButton}
             onPress={() => navigation.navigate("home")}
           >
-            <Ionicons name="chevron-back" size={32} color="black" />
+            <Ionicons name="chevron-back" size={32} color="white" />
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
         </ImageBackground>
@@ -119,40 +123,66 @@ const KlasifikasiPhotoScreen = () => {
             style={styles.backButton}
             onPress={() => navigation.navigate("home")}
           >
-            <Ionicons name="chevron-back" size={32} color="black" />
+            <Ionicons name="chevron-back" size={32} color="white" />
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
-          <View style={{ paddingHorizontal: 16 }}>
+          {/* <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: selectedImage.uri }} style={styles.image} />
-          </View>
+          </View> */}
           {loading ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color={colors.green} />
-              <Text>Sedang Melakukan Klasifikasi</Text>
+              <Text style={{ color : "white" }}>Sedang Melakukan Klasifikasi</Text>
             </View>
           ) : (
             data && (
+              // <ScrollView>
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Classification Result :</Text>
+              //     <Text style={styles.infoDesc}>{data.nama}</Text>
+              //     <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
+              //   </View>
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Description :</Text>
+              //     <Text style={styles.infoDesc}>{data.dekripsi}</Text>
+              //   </View>
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Ecology :</Text>
+              //     <Text style={styles.infoDesc}>{data.ekologi}</Text>
+              //   </View>
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Benefit :</Text>
+              //     <Text style={styles.infoDesc}>{data.manfaat}</Text>
+              //   </View>
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Spread :</Text>
+              //     <Text style={styles.infoDesc}>{data.penyebaran}</Text>
+              //   </View>
+              // </ScrollView>
               <ScrollView>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Classification Result :</Text>
-                  <Text style={styles.infoDesc}>{data.nama}</Text>
-                  <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Description :</Text>
-                  <Text style={styles.infoDesc}>{data.dekripsi}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Ecology :</Text>
-                  <Text style={styles.infoDesc}>{data.ekologi}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Benefit :</Text>
-                  <Text style={styles.infoDesc}>{data.manfaat}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Spread :</Text>
-                  <Text style={styles.infoDesc}>{data.penyebaran}</Text>
+                <View style={styles.containerVideo}>
+                  {videoLoading && (
+                    <View style={styles.videoLoadingContainer}>
+                      <ActivityIndicator
+                        size="large"
+                        color={"white"}
+                      />
+                      <Text style={{ color : "white" }}>Sedang Load Video</Text>
+                    </View>
+                  )}
+                  <Video
+                    source={{
+                      uri: data.videoSRC,
+                    }}
+                    rate={1.0}
+                    volume={1.0}
+                    isMuted={false}
+                    resizeMode="contain"
+                    shouldPlay
+                    onLoadStart={() => setVideoLoading(true)} // Start loading
+                    onLoad={() => setVideoLoading(false)} // Stop loading when the video is loaded
+                    style={{ width: width, height: height }} // Set video to full screen
+                  />
                 </View>
               </ScrollView>
             )
@@ -164,6 +194,25 @@ const KlasifikasiPhotoScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  containerVideo: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex : 1,
+    position : "relative"
+    // marginTop: 20,
+  },
+  videoLoadingContainer: {
+    position: "absolute",
+    top: "50%",
+    left: "40%",
+    transform: [{ translateX: -50 }, { translateY: -50 }],
+    flexDirection: "row",
+    gap: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+  },
   backButton: {
     flexDirection: "row",
     position: "absolute",
@@ -171,9 +220,10 @@ const styles = StyleSheet.create({
     left: 10,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 2,
   },
   backButtonText: {
-    color: "black",
+    color: "white",
     fontSize: 20,
   },
   groupInfo: {
@@ -211,12 +261,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    color: "black",
   },
   containerKlasifikasi: {
     flex: 1,
-    backgroundColor: "white",
-    color: "black",
+    backgroundColor : "black"
   },
   image: {
     marginTop: 100,
