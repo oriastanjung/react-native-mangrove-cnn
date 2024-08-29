@@ -33,16 +33,16 @@ const AboutScreen = () => {
       <View style={styles.headText}>
         <Text style={styles.text}>MANGROVE-ID</Text>
       </View>
-      <View style={{ position : "absolute", zIndex : 100, bottom : "15%", display : "flex", flexDirection : "column", gap: 5, width : "80%",borderRadius : 24, paddingHorizontal : 16, backgroundColor : "white" , paddingVertical : 24  }}>
+      <View style={{ position : "absolute", zIndex : 100, bottom : "15%", display : "flex", flexDirection : "column", gap: 5, width : "80%",borderRadius : 24, paddingHorizontal : 16,  paddingVertical : 24  }}>
         <Text style={{ color : "black", fontSize : 18, fontWeight : "700" ,textAlign : "center" }}>Created by Mangrove ID</Text>
         <Text style={{ color : "black", fontSize : 18, fontWeight : "700" ,textAlign : "center" }}>2024 ©  All Rights Reserved</Text>
-        <Text style={{ color : "black" , fontSize : 16, fontWeight : "700", marginTop : 30,textAlign : "left"  }}>People participated : </Text>
-        <Text style={{ color : "black" , fontSize : 16, fontWeight : "500", marginTop : 25 ,textAlign : "left"}}>1. Dr. Donny Apdillah, S.Pi., M.Si</Text>
-        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>2. Nola Ritha, S.T., M.Cs </Text>
-        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>3. Trinanda </Text>
-        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>4. Alramadan Oloansyah Dasopang </Text>
-        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>5. Teti Herliana </Text>
-        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "left"}}>6. O. Riastanjung </Text>
+        <Text style={{ color : "black" , fontSize : 16, fontWeight : "700", marginTop : 30,textAlign : "center"  }}>People participated : </Text>
+        <Text style={{ color : "black" , fontSize : 16, fontWeight : "500", marginTop : 25 ,textAlign : "center"}}>1. Dr. Donny Apdillah, S.Pi., M.Si</Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "center"}}>2. Nola Ritha, S.T., M.Cs </Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "center"}}>3. Trinanda </Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "center"}}>4. Alramadan Oloansyah Dasopang </Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "center"}}>5. Teti Herliana </Text>
+        <Text style={{ color : "black", fontSize : 16, fontWeight : "500", marginTop : 10 ,textAlign : "center"}}>6. O. Riastanjung </Text>
       </View>
       <ImageBackground
         resizeMode="cover"
