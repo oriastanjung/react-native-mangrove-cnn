@@ -22,7 +22,7 @@ import splashbg from "../assets/splashbg.png";
 import colors from "../colors";
 import { BACKEND_URL } from "../config";
 
-const KlasifikasiScreen = () => {
+const KlasifikasiDenganVideoScreen = () => {
   const navigation = useNavigation();
   const [photo, setPhoto] = useState(null);
   const [result, setResult] = useState("");
@@ -123,12 +123,12 @@ const KlasifikasiScreen = () => {
             style={styles.backButton}
             onPress={() => navigation.navigate("home")}
           >
-            <Ionicons name="chevron-back" size={32} color="black" />
-            <Text style={styles.backButtonText}>Back</Text>
+            <Ionicons name="chevron-back" size={32} color="white" />
+            <Text style={{ ...styles.backButtonText, color: "white" }}>Back</Text>
           </TouchableOpacity>
-          <View style={{ paddingHorizontal: 16 }}>
+          {/* <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: photo.uri }} style={styles.image} />
-          </View>
+          </View> */}
           {loading ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color={colors.greenDark} />
@@ -138,57 +138,57 @@ const KlasifikasiScreen = () => {
             </View>
           ) : (
             data && (
-              <ScrollView>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Classification Result :</Text>
-                  <Text style={styles.infoDesc}>{data.nama}</Text>
-                  <Text style={styles.infoDesc}>
-                    Confidence Level : {data.confidence}
-                  </Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Description :</Text>
-                  <Text style={styles.infoDesc}>{data.dekripsi}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Ecology :</Text>
-                  <Text style={styles.infoDesc}>{data.ekologi}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Benefit :</Text>
-                  <Text style={styles.infoDesc}>{data.manfaat}</Text>
-                </View>
-                <View style={styles.groupInfo}>
-                  <Text style={styles.infoTitle}>Spread :</Text>
-                  <Text style={styles.infoDesc}>{data.penyebaran}</Text>
-                </View>
-              </ScrollView>
               // <ScrollView>
-              //   <View style={styles.containerVideo}>
-              //     {videoLoading && (
-              //       <View style={styles.videoLoadingContainer}>
-              //         <ActivityIndicator
-              //           size="large"
-              //           color={"white"}
-              //         />
-              //         <Text style={{ color : "white" }}>Sedang Load Video</Text>
-              //       </View>
-              //     )}
-              //     <Video
-              //       source={{
-              //         uri: data.videoSRC,
-              //       }}
-              //       rate={1.0}
-              //       volume={1.0}
-              //       isMuted={false}
-              //       resizeMode="contain"
-              //       shouldPlay
-              //       onLoadStart={() => setVideoLoading(true)} // Start loading
-              //       onLoad={() => setVideoLoading(false)} // Stop loading when the video is loaded
-              //       style={{ width: width, height: height }} // Set video to full screen
-              //     />
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Classification Result :</Text>
+              //     <Text style={styles.infoDesc}>{data.nama}</Text>
+              //     <Text style={styles.infoDesc}>
+              //       Confidence Level : {data.confidence}
+              //     </Text>
+              //   </View>
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Description :</Text>
+              //     <Text style={styles.infoDesc}>{data.dekripsi}</Text>
+              //   </View>
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Ecology :</Text>
+              //     <Text style={styles.infoDesc}>{data.ekologi}</Text>
+              //   </View>
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Benefit :</Text>
+              //     <Text style={styles.infoDesc}>{data.manfaat}</Text>
+              //   </View>
+              //   <View style={styles.groupInfo}>
+              //     <Text style={styles.infoTitle}>Spread :</Text>
+              //     <Text style={styles.infoDesc}>{data.penyebaran}</Text>
               //   </View>
               // </ScrollView>
+              <ScrollView>
+                <View style={styles.containerVideo}>
+                  {videoLoading && (
+                    <View style={styles.videoLoadingContainer}>
+                      <ActivityIndicator
+                        size="large"
+                        color={"white"}
+                      />
+                      <Text style={{ color : "white" }}>Sedang Load Video</Text>
+                    </View>
+                  )}
+                  <Video
+                    source={{
+                      uri: data.videoSRC,
+                    }}
+                    rate={1.0}
+                    volume={1.0}
+                    isMuted={false}
+                    resizeMode="contain"
+                    shouldPlay
+                    onLoadStart={() => setVideoLoading(true)} // Start loading
+                    onLoad={() => setVideoLoading(false)} // Stop loading when the video is loaded
+                    style={{ width: width, height: height }} // Set video to full screen
+                  />
+                </View>
+              </ScrollView>
             )
           )}
         </SafeAreaView>
@@ -317,4 +317,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default KlasifikasiScreen;
+export default KlasifikasiDenganVideoScreen;

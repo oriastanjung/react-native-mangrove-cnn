@@ -24,6 +24,7 @@ import {
 
 import {Poppins_900Black} from "@expo-google-fonts/poppins"
 import AboutScreen from "./screens/AboutScreen";
+import KlasifikasiDenganVideoScreen from "./screens/KlasifikasiDenganVideoScreen";
 
 const Stack = createStackNavigator();
 
@@ -63,6 +64,10 @@ export default function App() {
           <Stack.Screen
             name="klasifikasiScreen"
             component={KlasifikasiScreen}
+          />
+          <Stack.Screen
+            name="klasifikasiVideoScreen"
+            component={KlasifikasiDenganVideoScreen}
           />
           <Stack.Screen
             name="jenisMangroveScreen"

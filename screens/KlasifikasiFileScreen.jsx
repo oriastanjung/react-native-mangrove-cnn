@@ -81,7 +81,7 @@ const KlasifikasiFileScreen = () => {
       const response = await klasifikasiGambar(base64);
       // setData(response.data_tanaman);
       setData({ ...response.data_tanaman, confidence: response.confidence });
-      console.log("response >> ", response);
+      // console.log("response >> ", response);
       setResult("Sukses");
       setLoading(false);
     } catch (error) {
@@ -104,7 +104,7 @@ const KlasifikasiFileScreen = () => {
             onPress={() => navigation.navigate("home")}
           >
             <Ionicons name="chevron-back" size={32} color="white" />
-            <Text style={styles.backButtonText}>Back</Text>
+            <Text style={{ ...styles.backButtonText, color : "white" }}>Back</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -121,12 +121,12 @@ const KlasifikasiFileScreen = () => {
             style={styles.backButton}
             onPress={() => navigation.navigate("home")}
           >
-            <Ionicons name="chevron-back" size={32} color="white" />
+            <Ionicons name="chevron-back" size={32} color="black" />
             <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
-          {/* <View style={{ paddingHorizontal: 16 }}>
+          <View style={{ paddingHorizontal: 16 }}>
             <Image source={{ uri: file.uri }} style={styles.image} />
-          </View> */}
+          </View>
           {loading ? (
             <View
               style={{
@@ -138,63 +138,63 @@ const KlasifikasiFileScreen = () => {
               }}
             >
               <ActivityIndicator size="large" color={colors.greenDark} />
-              <Text style={{ color : "white" }}>Sedang Melakukan Klasifikasi</Text>
+              <Text>Sedang Melakukan Klasifikasi</Text>
             </View>
           ) : (
-            // data && (
-            //   <ScrollView>
-            //     <View style={styles.groupInfo}>
-            //       <Text style={styles.infoTitle}>Classification Result :</Text>
-            //       <Text style={styles.infoDesc}>{data.nama}</Text>
-            //       <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
-            //     </View>
-            //     <View style={styles.groupInfo}>
-            //       <Text style={styles.infoTitle}>Description :</Text>
-            //       <Text style={styles.infoDesc}>{data.dekripsi}</Text>
-            //     </View>
-            //     <View style={styles.groupInfo}>
-            //       <Text style={styles.infoTitle}>Ecology :</Text>
-            //       <Text style={styles.infoDesc}>{data.ekologi}</Text>
-            //     </View>
-            //     <View style={styles.groupInfo}>
-            //       <Text style={styles.infoTitle}>Benefit :</Text>
-            //       <Text style={styles.infoDesc}>{data.manfaat}</Text>
-            //     </View>
-            //     <View style={styles.groupInfo}>
-            //       <Text style={styles.infoTitle}>Spread :</Text>
-            //       <Text style={styles.infoDesc}>{data.penyebaran}</Text>
-            //     </View>
-            //   </ScrollView>
-            // )
             data && (
               <ScrollView>
-                <View style={styles.containerVideo}>
-                  {videoLoading && (
-                    <View style={styles.videoLoadingContainer}>
-                      <ActivityIndicator
-                        size="large"
-                        color={"white"}
-                      />
-                      <Text style={{ color : "white" }}>Sedang Load Video</Text>
-                    </View>
-                  )}
-                  <Video
-                    source={{
-                      uri: data.videoSRC,
-                    }}
-                    rate={1.0}
-                    volume={1.0}
-                    isMuted={false}
-                    resizeMode="contain"
-                    shouldPlay
-                    onLoadStart={() => setVideoLoading(true)} // Start loading
-                    onLoad={() => setVideoLoading(false)} // Stop loading when the video is loaded\
-                    onEnd
-                    style={{ width: width, height: height }} // Set video to full screen
-                  />
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Classification Result :</Text>
+                  <Text style={styles.infoDesc}>{data.nama}</Text>
+                  <Text style={styles.infoDesc}>Confidence Level : {data.confidence}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Description :</Text>
+                  <Text style={styles.infoDesc}>{data.dekripsi}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Ecology :</Text>
+                  <Text style={styles.infoDesc}>{data.ekologi}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Benefit :</Text>
+                  <Text style={styles.infoDesc}>{data.manfaat}</Text>
+                </View>
+                <View style={styles.groupInfo}>
+                  <Text style={styles.infoTitle}>Spread :</Text>
+                  <Text style={styles.infoDesc}>{data.penyebaran}</Text>
                 </View>
               </ScrollView>
             )
+            // data && (
+            //   <ScrollView>
+            //     <View style={styles.containerVideo}>
+            //       {videoLoading && (
+            //         <View style={styles.videoLoadingContainer}>
+            //           <ActivityIndicator
+            //             size="large"
+            //             color={"white"}
+            //           />
+            //           <Text style={{ color : "white" }}>Sedang Load Video</Text>
+            //         </View>
+            //       )}
+            //       <Video
+            //         source={{
+            //           uri: data.videoSRC,
+            //         }}
+            //         rate={1.0}
+            //         volume={1.0}
+            //         isMuted={false}
+            //         resizeMode="contain"
+            //         shouldPlay
+            //         onLoadStart={() => setVideoLoading(true)} // Start loading
+            //         onLoad={() => setVideoLoading(false)} // Stop loading when the video is loaded\
+            //         onEnd
+            //         style={{ width: width, height: height }} // Set video to full screen
+            //       />
+            //     </View>
+            //   </ScrollView>
+            // )
           )}
         </SafeAreaView>
       )}
@@ -228,10 +228,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
-  },
-  backButtonText: {
-    color: "white",
-    fontSize: 20,
   },
   groupInfo: {
     paddingHorizontal: 30,
@@ -273,7 +269,7 @@ const styles = StyleSheet.create({
   },
   containerKlasifikasi: {
     flex: 1,
-    backgroundColor:"black"
+    backgroundColor:"white"
   },
   image: {
     marginTop: 100,
@@ -297,7 +293,6 @@ const styles = StyleSheet.create({
   },
 
   backButtonText: {
-    color: "white",
     fontSize: 20,
   },
   fileName: {

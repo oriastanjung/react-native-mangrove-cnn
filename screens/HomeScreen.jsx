@@ -39,7 +39,7 @@ const HomeScreen = () => {
             <View style={styles.btnBackground} />
             <Ionicons
               name="image-outline"
-              size={84}
+              size={52}
               color="white"
               style={styles.icon}
             />
@@ -52,7 +52,7 @@ const HomeScreen = () => {
             <View style={styles.btnBackground} />
             <Feather
               name="file-text"
-              size={84}
+              size={52}
               color="white"
               style={styles.icon}
             />
@@ -67,7 +67,7 @@ const HomeScreen = () => {
             <View style={styles.btnBackground} />
             <AntDesign
               name="camerao"
-              size={84}
+              size={52}
               color="white"
               style={styles.icon}
             />
@@ -80,14 +80,44 @@ const HomeScreen = () => {
             <View style={styles.btnBackground} />
             <MaterialCommunityIcons
               name="file-document-edit-outline"
-              size={84}
+              size={52}
               color="white"
               style={styles.icon}
             />
             <Text style={styles.btnText}>Species</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
+        <View style={styles.row}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => navigation.navigate("klasifikasiVideoScreen")}
+          >
+            <View style={styles.btnBackground} />
+            <AntDesign
+              name="playcircleo"
+              size={44}
+              color="white"
+              style={styles.icon}
+            />
+            <Text style={styles.btnText}>Visual Guide</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => navigation.navigate("aboutScreen")}
+          >
+            <View style={styles.btnBackground} />
+            <MaterialCommunityIcons
+              name="information-outline"
+              size={52}
+              color="white"
+              style={styles.icon}
+            />
+            <Text style={styles.btnText}>About</Text>
+          </TouchableOpacity>
+        </View>
+
+
+        {/* <TouchableOpacity
           style={styles.infoBTN}
           onPress={() => navigation.navigate("aboutScreen")}
         >
@@ -97,7 +127,7 @@ const HomeScreen = () => {
             color="white"
             style={styles.icon}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Image
           source={require("../assets/bottomSplash.png")}
           style={styles.bottomSplash}
@@ -150,7 +180,7 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     flex: 1,
-    paddingTop: 160,
+    paddingTop: 200,
     // marginTop: 150,
     width: "100%",
     alignItems: "center",
@@ -176,8 +206,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     margin: 10, // Adds spacing between buttons
-    width: 160, // Fixed width
-    height: 160, // Fixed height
+    width: 120, // Fixed width
+    height: 120, // Fixed height
     justifyContent: "center", // Center the content vertically
   },
   btnBackground: {
@@ -187,7 +217,7 @@ const styles = StyleSheet.create({
     borderRadius: 10, // Make sure the borderRadius matches the button's borderRadius
   },
   icon: {
-    marginBottom: 20,
+    marginBottom: 10,
     zIndex: 1,
   },
   btnText: {
