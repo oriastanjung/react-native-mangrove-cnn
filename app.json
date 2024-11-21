@@ -22,11 +22,11 @@
       "config": {
         "cleartext": {
           "config": {
-            "includeDomains": ["http://***********:5000", "http://***********", "***********"] 
+            "includeDomains": ["http://195.200.15.181:5000", "http://195.200.15.181", "***********"] 
           }
         }
       },
-      "package": "com.mangroveid.app"
+      "package": "com.mangrove.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
